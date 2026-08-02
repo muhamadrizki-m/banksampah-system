@@ -55,6 +55,7 @@ class RegisteredUserController extends Controller
         
        // event(new Registered($user));
 
+       
         // Login otomatis
         Auth::login($user);
 

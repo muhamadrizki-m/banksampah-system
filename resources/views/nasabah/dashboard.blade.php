@@ -1,7 +1,7 @@
 @extends('layouts.nasabah')
 
 @push('styles')
-<link rel="stylesheet" href="{{ asset('css/nasabah/index.css') }}">
+<link rel="stylesheet" href="{{ asset('css/nasabah/dashboard.css') }}">
 @endpush
 
 @section('content')
