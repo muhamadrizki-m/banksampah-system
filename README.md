@@ -1,53 +1,53 @@
-# Bank Sampah
+# Waste Bank
 
-Aplikasi web untuk mengelola operasional bank sampah. Admin mencatat setoran dan mengelola data nasabah, jenis sampah, serta hadiah. Nasabah dapat memantau poin dan statistik, lalu menukarkan poin dengan hadiah.
+A web application for managing waste bank operations. Administrators record waste deposits and manage customers, waste types, and rewards. Customers can track their points and statistics, then redeem points for rewards.
 
-## Fitur
+## Features
 
 ### Admin
 
-- Dashboard ringkasan nasabah, transaksi, jenis sampah, poin, dan aktivitas terbaru.
-- Pengelolaan data nasabah.
-- Pengelolaan jenis sampah dan nilai poin per kilogram.
-- Pencatatan setoran yang berisi satu atau beberapa jenis sampah dalam satu batch.
-- Perhitungan poin setoran dan level nasabah.
-- Tampilan dan unduhan struk transaksi dalam PDF.
-- Pengelolaan katalog hadiah, stok, harga poin, dan status ketersediaan.
-- Riwayat penukaran hadiah.
+- Dashboard with customer, transaction, waste type, point, and recent activity summaries.
+- Customer management.
+- Waste type management, including points per kilogram.
+- Deposit recording with one or more waste types in a single batch.
+- Deposit point calculation and customer rank tracking.
+- Transaction receipt view and PDF download.
+- Reward catalog management, including stock, point prices, and availability.
+- Reward redemption history.
 
-### Nasabah
+### Customer
 
-- Registrasi, login, dan pengelolaan profil.
-- Dashboard berisi saldo poin, level, aktivitas terbaru, serta ringkasan setoran dan penukaran.
-- Statistik berat dan poin setoran, progres level, dan ringkasan jenis sampah.
-- Penukaran poin dengan satu hadiah atau beberapa item sekaligus.
-- Riwayat dan detail penukaran.
+- Registration, login, and profile management.
+- Dashboard with point balance, rank, recent activity, and deposit and redemption summaries.
+- Statistics for deposited weight and points, rank progress, and waste type summaries.
+- Redeem points for one reward or multiple items at once.
+- Redemption history and details.
 
-Level nasabah dihitung dari poin terkumpul: Pemula (0), Aktif (500), Peduli (2.000), Penggerak (5.000), dan Pelopor (10.000).
+Customer ranks are based on accumulated points: Beginner (0), Active (500), Caring (2,000), Driver (5,000), and Pioneer (10,000).
 
-> **Status halaman pencapaian:** model dan relasi pencapaian tersedia, tetapi `resources/views/nasabah/achievement.blade.php` masih menampilkan “Coming Soon” dan belum memiliki route khusus.
+> **Achievements status:** The achievement model and relationship are present, but `resources/views/nasabah/achievement.blade.php` still displays “Coming Soon” and does not have a dedicated route.
 
-## Teknologi
+## Tech stack
 
 - PHP 8.2+
 - Laravel 12
-- SQLite secara default, atau MySQL/MariaDB melalui konfigurasi `.env`
-- Blade, Tailwind CSS, Alpine.js, dan Vite
-- DomPDF untuk membuat struk PDF
+- SQLite by default, or MySQL/MariaDB through `.env` configuration
+- Blade, Tailwind CSS, Alpine.js, and Vite
+- DomPDF for PDF receipts
 
-## Persiapan
+## Requirements
 
-Pastikan PHP dan Composer terpasang. Untuk aset frontend, pasang Node.js dan npm. Ekstensi PHP yang diperlukan mengikuti persyaratan Laravel dan driver database yang dipilih (misalnya `pdo_sqlite` untuk SQLite atau `pdo_mysql` untuk MySQL).
+Install PHP and Composer. Node.js and npm are required for frontend assets. Required PHP extensions depend on Laravel and the selected database driver (for example, `pdo_sqlite` for SQLite or `pdo_mysql` for MySQL).
 
-## Instalasi lokal
+## Local setup
 
-Jalankan dari direktori proyek:
+Run these commands from the project directory:
 
 ```bash
 composer install
 ```
 
-Salin `.env.example` menjadi `.env`, lalu buat kunci aplikasi:
+Copy `.env.example` to `.env`, then generate the application key:
 
 ```bash
 # Windows PowerShell
@@ -59,7 +59,7 @@ cp .env.example .env
 php artisan key:generate
 ```
 
-Konfigurasi bawaan menggunakan SQLite. Buat file database jika belum ada:
+The default database is SQLite. Create the database file if it does not exist:
 
 ```bash
 # Windows PowerShell
@@ -69,7 +69,7 @@ New-Item -ItemType File -Force database/database.sqlite
 touch database/database.sqlite
 ```
 
-Lalu jalankan migrasi, buat tautan penyimpanan untuk gambar hadiah, dan siapkan aset frontend:
+Run the migrations, create the public storage link for reward images, and build the frontend assets:
 
 ```bash
 php artisan migrate --seed
@@ -78,18 +78,18 @@ npm install
 npm run build
 ```
 
-Untuk menjalankan aplikasi dalam mode pengembangan:
+Start the local development server:
 
 ```bash
 php artisan serve
 ```
 
-Buka alamat yang ditampilkan oleh Artisan, biasanya `http://127.0.0.1:8000`.
+Open the URL printed by Artisan, usually `http://127.0.0.1:8000`.
 
-### Menggunakan MySQL/MariaDB dari XAMPP
+### Using MySQL/MariaDB with XAMPP
 
-1. Jalankan layanan MySQL di XAMPP dan buat database kosong, misalnya `banksampah`.
-2. Ubah konfigurasi database pada `.env`:
+1. Start MySQL in XAMPP and create an empty database, for example `banksampah`.
+2. Update the database settings in `.env`:
 
 ```dotenv
 DB_CONNECTION=mysql
@@ -100,52 +100,52 @@ DB_USERNAME=root
 DB_PASSWORD=
 ```
 
-3. Jalankan migrasi dan langkah persiapan lain dari bagian instalasi lokal.
+3. Run the migrations and the remaining setup steps above.
 
-Jangan unggah `.env` ke GitHub. File ini berisi konfigurasi lokal dan rahasia aplikasi.
+Do not commit `.env` to GitHub. It contains local configuration and application secrets.
 
-## Akun awal
+## Initial admin account
 
-`php artisan migrate --seed` menjalankan `AdminSeeder`, yang membuat atau memperbarui akun admin untuk keperluan awal. Periksa `database/seeders/AdminSeeder.php` untuk detail akun, lalu ganti kata sandinya sebelum aplikasi digunakan di lingkungan bersama atau publik. Seeder jenis sampah, hadiah, dan pencapaian saat ini masih kosong; tambahkan data melalui panel admin atau lengkapi seedernya.
+`php artisan migrate --seed` runs `AdminSeeder`, which creates or updates an admin account for initial setup. Check `database/seeders/AdminSeeder.php` for the account details, and change its password before using the application in a shared or public environment. The waste type, reward, and achievement seeders are currently empty; add data through the admin panel or complete those seeders.
 
-## Struktur proyek
+## Project structure
 
 ```text
 app/
-  Http/Controllers/       Logika untuk admin, nasabah, autentikasi, dan profil
-  Http/Middleware/        Pembatas akses, termasuk middleware admin
+  Http/Controllers/       Admin, customer, authentication, and profile logic
+  Http/Middleware/        Access controls, including admin middleware
   Models/                 User, WasteTransaction, WasteType, Grocery, Redemption, Achievement
- database/
-  migrations/             Struktur tabel dan perubahan skema
-  seeders/                Data awal aplikasi
- resources/views/         Halaman Blade, layout, komponen, dan aset frontend
- routes/
-  web.php                 Route aplikasi admin, nasabah, landing page, dan profil
-  auth.php                Route login, registrasi, dan autentikasi
+database/
+  migrations/             Database schema and schema changes
+  seeders/                Initial data
+resources/views/          Blade pages, layouts, components, and frontend assets
+routes/
+  web.php                 Admin, customer, landing page, and profile routes
+  auth.php                Login, registration, and authentication routes
 ```
 
-## Route utama
+## Main routes
 
-| Area | Route | Keterangan |
+| Area | Route | Description |
 | --- | --- | --- |
-| Umum | `/` | Landing page |
-| Admin | `/admin/dashboard` | Dashboard admin |
-| Admin | `/admin/nasabah` | Pengelolaan nasabah |
-| Admin | `/admin/waste-types` | Pengelolaan jenis sampah |
-| Admin | `/admin/waste-transactions` | Setoran dan struk transaksi |
-| Admin | `/admin/groceries` | Katalog hadiah |
-| Admin | `/admin/redemptions` | Riwayat penukaran |
-| Nasabah | `/nasabah/dashboard` | Dashboard nasabah |
-| Nasabah | `/nasabah/tukar-poin` | Katalog dan penukaran hadiah |
-| Nasabah | `/nasabah/riwayat-penukaran` | Riwayat penukaran |
-| Nasabah | `/nasabah/statistik` | Statistik setoran |
-| Nasabah | `/nasabah/profil` | Profil nasabah |
+| General | `/` | Landing page |
+| Admin | `/admin/dashboard` | Admin dashboard |
+| Admin | `/admin/nasabah` | Customer management |
+| Admin | `/admin/waste-types` | Waste type management |
+| Admin | `/admin/waste-transactions` | Deposits and transaction receipts |
+| Admin | `/admin/groceries` | Reward catalog |
+| Admin | `/admin/redemptions` | Redemption history |
+| Customer | `/nasabah/dashboard` | Customer dashboard |
+| Customer | `/nasabah/tukar-poin` | Reward catalog and redemption |
+| Customer | `/nasabah/riwayat-penukaran` | Redemption history |
+| Customer | `/nasabah/statistik` | Deposit statistics |
+| Customer | `/nasabah/profil` | Customer profile |
 
-Route admin memerlukan autentikasi dan role `admin`. Route nasabah memerlukan autentikasi.
+Admin routes require authentication and the `admin` role. Customer routes require authentication.
 
-## Catatan pengembangan
+## Development notes
 
-- Seeder awal hanya mengisi akun admin; seeders jenis sampah, hadiah, dan pencapaian belum berisi data.
-- Halaman pencapaian belum selesai dan belum terhubung ke route.
-- Pengaturan email pada `.env.example` menggunakan mailer `log`; sesuaikan konfigurasi mail jika fitur email akan dipakai.
-- Jalankan `npm run dev` saat mengembangkan CSS/JavaScript agar Vite memantau perubahan.
+- The initial database seeder only creates an admin account; waste type, reward, and achievement seeders contain no data yet.
+- The achievements page is unfinished and is not connected to a route.
+- The `.env.example` mailer is set to `log`; configure a mail service if email delivery is needed.
+- Run `npm run dev` during development to let Vite watch CSS and JavaScript changes.
