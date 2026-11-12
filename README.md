@@ -1,59 +1,151 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Bank Sampah
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Aplikasi web untuk mengelola operasional bank sampah. Admin mencatat setoran dan mengelola data nasabah, jenis sampah, serta hadiah. Nasabah dapat memantau poin dan statistik, lalu menukarkan poin dengan hadiah.
 
-## About Laravel
+## Fitur
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### Admin
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- Dashboard ringkasan nasabah, transaksi, jenis sampah, poin, dan aktivitas terbaru.
+- Pengelolaan data nasabah.
+- Pengelolaan jenis sampah dan nilai poin per kilogram.
+- Pencatatan setoran yang berisi satu atau beberapa jenis sampah dalam satu batch.
+- Perhitungan poin setoran dan level nasabah.
+- Tampilan dan unduhan struk transaksi dalam PDF.
+- Pengelolaan katalog hadiah, stok, harga poin, dan status ketersediaan.
+- Riwayat penukaran hadiah.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Nasabah
 
-## Learning Laravel
+- Registrasi, login, dan pengelolaan profil.
+- Dashboard berisi saldo poin, level, aktivitas terbaru, serta ringkasan setoran dan penukaran.
+- Statistik berat dan poin setoran, progres level, dan ringkasan jenis sampah.
+- Penukaran poin dengan satu hadiah atau beberapa item sekaligus.
+- Riwayat dan detail penukaran.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+Level nasabah dihitung dari poin terkumpul: Pemula (0), Aktif (500), Peduli (2.000), Penggerak (5.000), dan Pelopor (10.000).
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+> **Status halaman pencapaian:** model dan relasi pencapaian tersedia, tetapi `resources/views/nasabah/achievement.blade.php` masih menampilkan “Coming Soon” dan belum memiliki route khusus.
 
-## Laravel Sponsors
+## Teknologi
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+- PHP 8.2+
+- Laravel 12
+- SQLite secara default, atau MySQL/MariaDB melalui konfigurasi `.env`
+- Blade, Tailwind CSS, Alpine.js, dan Vite
+- DomPDF untuk membuat struk PDF
 
-### Premium Partners
+## Persiapan
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+Pastikan PHP dan Composer terpasang. Untuk aset frontend, pasang Node.js dan npm. Ekstensi PHP yang diperlukan mengikuti persyaratan Laravel dan driver database yang dipilih (misalnya `pdo_sqlite` untuk SQLite atau `pdo_mysql` untuk MySQL).
 
-## Contributing
+## Instalasi lokal
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Jalankan dari direktori proyek:
 
-## Code of Conduct
+```bash
+composer install
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Salin `.env.example` menjadi `.env`, lalu buat kunci aplikasi:
 
-## Security Vulnerabilities
+```bash
+# Windows PowerShell
+Copy-Item .env.example .env
+php artisan key:generate
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+# macOS/Linux
+cp .env.example .env
+php artisan key:generate
+```
 
-## License
+Konfigurasi bawaan menggunakan SQLite. Buat file database jika belum ada:
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```bash
+# Windows PowerShell
+New-Item -ItemType File -Force database/database.sqlite
+
+# macOS/Linux
+touch database/database.sqlite
+```
+
+Lalu jalankan migrasi, buat tautan penyimpanan untuk gambar hadiah, dan siapkan aset frontend:
+
+```bash
+php artisan migrate --seed
+php artisan storage:link
+npm install
+npm run build
+```
+
+Untuk menjalankan aplikasi dalam mode pengembangan:
+
+```bash
+php artisan serve
+```
+
+Buka alamat yang ditampilkan oleh Artisan, biasanya `http://127.0.0.1:8000`.
+
+### Menggunakan MySQL/MariaDB dari XAMPP
+
+1. Jalankan layanan MySQL di XAMPP dan buat database kosong, misalnya `banksampah`.
+2. Ubah konfigurasi database pada `.env`:
+
+```dotenv
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=banksampah
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+3. Jalankan migrasi dan langkah persiapan lain dari bagian instalasi lokal.
+
+Jangan unggah `.env` ke GitHub. File ini berisi konfigurasi lokal dan rahasia aplikasi.
+
+## Akun awal
+
+`php artisan migrate --seed` menjalankan `AdminSeeder`, yang membuat atau memperbarui akun admin untuk keperluan awal. Periksa `database/seeders/AdminSeeder.php` untuk detail akun, lalu ganti kata sandinya sebelum aplikasi digunakan di lingkungan bersama atau publik. Seeder jenis sampah, hadiah, dan pencapaian saat ini masih kosong; tambahkan data melalui panel admin atau lengkapi seedernya.
+
+## Struktur proyek
+
+```text
+app/
+  Http/Controllers/       Logika untuk admin, nasabah, autentikasi, dan profil
+  Http/Middleware/        Pembatas akses, termasuk middleware admin
+  Models/                 User, WasteTransaction, WasteType, Grocery, Redemption, Achievement
+ database/
+  migrations/             Struktur tabel dan perubahan skema
+  seeders/                Data awal aplikasi
+ resources/views/         Halaman Blade, layout, komponen, dan aset frontend
+ routes/
+  web.php                 Route aplikasi admin, nasabah, landing page, dan profil
+  auth.php                Route login, registrasi, dan autentikasi
+```
+
+## Route utama
+
+| Area | Route | Keterangan |
+| --- | --- | --- |
+| Umum | `/` | Landing page |
+| Admin | `/admin/dashboard` | Dashboard admin |
+| Admin | `/admin/nasabah` | Pengelolaan nasabah |
+| Admin | `/admin/waste-types` | Pengelolaan jenis sampah |
+| Admin | `/admin/waste-transactions` | Setoran dan struk transaksi |
+| Admin | `/admin/groceries` | Katalog hadiah |
+| Admin | `/admin/redemptions` | Riwayat penukaran |
+| Nasabah | `/nasabah/dashboard` | Dashboard nasabah |
+| Nasabah | `/nasabah/tukar-poin` | Katalog dan penukaran hadiah |
+| Nasabah | `/nasabah/riwayat-penukaran` | Riwayat penukaran |
+| Nasabah | `/nasabah/statistik` | Statistik setoran |
+| Nasabah | `/nasabah/profil` | Profil nasabah |
+
+Route admin memerlukan autentikasi dan role `admin`. Route nasabah memerlukan autentikasi.
+
+## Catatan pengembangan
+
+- Seeder awal hanya mengisi akun admin; seeders jenis sampah, hadiah, dan pencapaian belum berisi data.
+- Halaman pencapaian belum selesai dan belum terhubung ke route.
+- Pengaturan email pada `.env.example` menggunakan mailer `log`; sesuaikan konfigurasi mail jika fitur email akan dipakai.
+- Jalankan `npm run dev` saat mengembangkan CSS/JavaScript agar Vite memantau perubahan.
